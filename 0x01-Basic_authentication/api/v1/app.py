@@ -2,12 +2,13 @@
 """
 Route module for the API
 """
+from __future__ import annotations
 from os import getenv
 from api.v1.views import app_views
 from flask import Flask, jsonify, abort, request
 from flask_cors import (CORS, cross_origin)
 import os
-
+from typing_extensions import Literal
 
 app = Flask(__name__)
 app.register_blueprint(app_views)
@@ -19,6 +20,12 @@ def not_found(error) -> str:
     """ Not found handler
     """
     return jsonify({"error": "Not found"}), 404
+
+@app.errorhandler(401)
+def unauthorized(error) -> tuple[str, Literal[401]]:
+    """ unauthorized
+    """
+    return jsonify({"error": "unauthorized"}), 401
 
 
 if __name__ == "__main__":
